@@ -1,0 +1,298 @@
+<!doctype html>
+<html lang="es">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="theme-color" content="#071321" />
+    <title>Misión: Gamificación Evaluativa</title>
+    <style>
+      :root {
+        --ink: #071321;
+        --ink-2: #0d2134;
+        --panel: rgba(19, 44, 64, 0.82);
+        --cyan: #63f3ee;
+        --cyan-2: #27cdd5;
+        --lavender: #bca7ff;
+        --cream: #f5f1e8;
+        --muted: #a5b9c4;
+        --danger: #ff8d91;
+        --good: #92f6c0;
+        --line: rgba(99, 243, 238, 0.22);
+      }
+
+      * { box-sizing: border-box; }
+
+      body {
+        margin: 0;
+        min-height: 100vh;
+        color: var(--cream);
+        background:
+          radial-gradient(circle at 12% 8%, rgba(39, 205, 213, 0.17), transparent 28rem),
+          radial-gradient(circle at 88% 85%, rgba(188, 167, 255, 0.15), transparent 32rem),
+          var(--ink);
+        font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      }
+
+      body::before {
+        content: "";
+        position: fixed;
+        inset: 0;
+        pointer-events: none;
+        opacity: 0.18;
+        background-image: linear-gradient(rgba(255,255,255,.035) 1px, transparent 1px), linear-gradient(90deg, rgba(255,255,255,.035) 1px, transparent 1px);
+        background-size: 42px 42px;
+        mask-image: linear-gradient(to bottom, black, transparent 78%);
+      }
+
+      .wrap { width: min(100% - 32px, 760px); margin: 0 auto; padding: 28px 0 44px; }
+      .topline { display: flex; align-items: center; justify-content: space-between; gap: 14px; margin-bottom: 32px; }
+      .eyebrow, .mono { font: 700 10px/1.2 ui-monospace, SFMono-Regular, Menlo, monospace; letter-spacing: .19em; text-transform: uppercase; color: var(--cyan); }
+      .brand { display: flex; gap: 10px; align-items: center; }
+      .brand-mark { width: 28px; height: 28px; display: grid; place-items: center; border: 1px solid var(--cyan); border-radius: 9px; color: var(--cyan); box-shadow: 0 0 22px rgba(99,243,238,.18); }
+      .mission-code { color: var(--muted); }
+
+      .panel {
+        position: relative;
+        overflow: hidden;
+        border: 1px solid var(--line);
+        border-radius: 24px;
+        background: linear-gradient(150deg, rgba(16, 45, 65, .94), rgba(7, 19, 33, .93));
+        box-shadow: 0 22px 80px rgba(0,0,0,.28);
+      }
+
+      .screen { padding: clamp(25px, 5vw, 48px); }
+      .hero { min-height: 660px; display: flex; flex-direction: column; justify-content: space-between; }
+      .hero h1 { max-width: 590px; margin: 24px 0 18px; font: 800 clamp(42px, 8vw, 86px)/.9 Inter, ui-sans-serif, system-ui; letter-spacing: -.065em; }
+      .hero h1 span { color: var(--cyan); }
+      .hero p { max-width: 510px; margin: 0; color: var(--muted); font-size: 17px; line-height: 1.65; }
+      .robot-orbit { position: absolute; right: 8%; top: 14%; width: 190px; height: 190px; border: 1px solid rgba(99,243,238,.4); border-radius: 50%; box-shadow: 0 0 45px rgba(99,243,238,.12), inset 0 0 45px rgba(99,243,238,.08); }
+      .robot-orbit::before, .robot-orbit::after { content: ""; position: absolute; inset: 22px; border: 1px solid rgba(188,167,255,.35); border-radius: 50%; }
+      .robot-orbit::after { inset: 68px; background: radial-gradient(circle at 35% 32%, #d9ffff 0 6%, var(--cyan) 7% 12%, #16495b 13% 100%); border: 3px solid #e8ffff; box-shadow: 0 0 24px var(--cyan); }
+      .steps { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; margin: 34px 0; }
+      .step { padding: 14px; border: 1px solid rgba(255,255,255,.1); border-radius: 15px; background: rgba(255,255,255,.035); }
+      .step strong { display: block; margin: 8px 0 4px; color: var(--cream); font-size: 14px; }
+      .step small { color: var(--muted); line-height: 1.4; }
+      button { font: inherit; cursor: pointer; }
+      .primary { border: 0; border-radius: 13px; padding: 16px 21px; color: var(--ink); background: var(--cyan); font-weight: 800; box-shadow: 0 10px 30px rgba(99,243,238,.22); transition: transform .2s ease, box-shadow .2s ease; }
+      .primary:hover { transform: translateY(-2px); box-shadow: 0 14px 38px rgba(99,243,238,.32); }
+      .ghost { border: 1px solid var(--line); border-radius: 13px; padding: 14px 17px; color: var(--cream); background: transparent; font-weight: 700; }
+
+      .quiz-head { display: flex; justify-content: space-between; gap: 16px; align-items: start; margin-bottom: 28px; }
+      .quiz-head h2 { margin: 10px 0 0; font-size: clamp(25px, 5vw, 42px); letter-spacing: -.04em; }
+      .timer { min-width: 72px; text-align: center; padding: 11px 10px; border: 1px solid rgba(99,243,238,.35); border-radius: 14px; }
+      .timer strong { display: block; color: var(--cyan); font: 800 25px/1 ui-monospace, monospace; }
+      .timer span { color: var(--muted); font-size: 10px; text-transform: uppercase; letter-spacing: .12em; }
+      .progress { height: 5px; margin-bottom: 30px; border-radius: 99px; overflow: hidden; background: rgba(255,255,255,.08); }
+      .progress i { display: block; height: 100%; width: 33.333%; border-radius: inherit; background: linear-gradient(90deg, var(--cyan), var(--lavender)); transition: width .35s ease; }
+      .question { color: var(--cream); font-size: clamp(22px, 4vw, 34px); line-height: 1.15; letter-spacing: -.035em; margin: 0 0 24px; }
+      .answers { display: grid; gap: 12px; }
+      .answer { width: 100%; text-align: left; border: 1px solid rgba(255,255,255,.14); border-radius: 15px; padding: 17px; color: var(--cream); background: rgba(255,255,255,.045); transition: border-color .18s ease, background .18s ease, transform .18s ease; }
+      .answer:hover { border-color: var(--cyan); background: rgba(99,243,238,.09); transform: translateX(4px); }
+      .answer b { display: inline-grid; place-items: center; width: 28px; height: 28px; margin-right: 12px; border: 1px solid var(--line); border-radius: 9px; color: var(--cyan); font: 700 12px ui-monospace, monospace; }
+      .answer.correct { border-color: var(--good); background: rgba(146,246,192,.11); }
+      .answer.wrong { border-color: var(--danger); background: rgba(255,141,145,.11); }
+      .answer:disabled { cursor: default; transform: none; }
+      .feedback { min-height: 26px; margin-top: 18px; color: var(--muted); line-height: 1.45; }
+      .feedback.good { color: var(--good); }
+      .feedback.bad { color: var(--danger); }
+
+      .result { text-align: center; min-height: 620px; display: flex; flex-direction: column; align-items: center; justify-content: center; }
+      .score-ring { display: grid; place-items: center; width: 150px; height: 150px; border: 1px solid var(--cyan); border-radius: 50%; box-shadow: 0 0 50px rgba(99,243,238,.18), inset 0 0 35px rgba(99,243,238,.11); }
+      .score-ring strong { font: 800 44px/1 ui-monospace, monospace; color: var(--cyan); }
+      .result h2 { margin: 30px 0 10px; font-size: 40px; letter-spacing: -.05em; }
+      .result p { max-width: 430px; color: var(--muted); line-height: 1.6; }
+      .badge { margin: 18px 0 28px; padding: 12px 16px; border: 1px solid rgba(188,167,255,.55); border-radius: 99px; color: var(--lavender); font: 700 11px ui-monospace, monospace; letter-spacing: .13em; text-transform: uppercase; }
+      .hidden { display: none !important; }
+      .fineprint { margin-top: 18px; color: #73909f; font-size: 12px; line-height: 1.5; text-align: center; }
+
+      @media (max-width: 610px) {
+        .wrap { width: min(100% - 20px, 760px); padding-top: 18px; }
+        .topline { margin-bottom: 20px; }
+        .robot-orbit { width: 120px; height: 120px; right: -10px; top: 13%; opacity: .65; }
+        .robot-orbit::before { inset: 14px; }
+        .robot-orbit::after { inset: 44px; }
+        .steps { gap: 7px; }
+        .step { padding: 10px; }
+        .step small { font-size: 11px; }
+      }
+    </style>
+  </head>
+  <body>
+    <main class="wrap">
+      <header class="topline">
+        <div class="brand">
+          <div class="brand-mark">✦</div>
+          <div class="eyebrow">Misión educativa</div>
+        </div>
+        <div class="mission-code mono">QUIZ · 03 PREGUNTAS</div>
+      </header>
+
+      <section id="start" class="panel screen hero">
+        <div>
+          <div class="eyebrow">Reto interactivo / Gamificación Evaluativa</div>
+          <h1>Convierte la nota en <span>insignia.</span></h1>
+          <p>Ayuda a QUIZ a restaurar el ciclo del agua. Responde tres preguntas y descubre cómo los puntos, los retos y la retroalimentación pueden cambiar la experiencia de evaluar.</p>
+          <div class="robot-orbit" aria-hidden="true"></div>
+        </div>
+        <div>
+          <div class="steps">
+            <div class="step"><div class="mono">01</div><strong>Lee el reto</strong><small>Una pregunta a la vez.</small></div>
+            <div class="step"><div class="mono">02</div><strong>15 segundos</strong><small>Elige antes de que se cierre la pista.</small></div>
+            <div class="step"><div class="mono">03</div><strong>Recibe feedback</strong><small>El error también enseña.</small></div>
+          </div>
+          <button class="primary" id="startBtn">Comenzar misión →</button>
+        </div>
+      </section>
+
+      <section id="quiz" class="panel screen hidden" aria-live="polite">
+        <div class="quiz-head">
+          <div>
+            <div class="eyebrow" id="questionLabel">Pregunta 01 / 03</div>
+            <h2>Restaura el conocimiento.</h2>
+          </div>
+          <div class="timer"><strong id="timer">15</strong><span>segundos</span></div>
+        </div>
+        <div class="progress"><i id="progress"></i></div>
+        <p class="question" id="question"></p>
+        <div class="answers" id="answers"></div>
+        <div class="feedback" id="feedback"></div>
+        <button class="primary hidden" id="nextBtn">Siguiente pista →</button>
+      </section>
+
+      <section id="result" class="panel screen result hidden" aria-live="polite">
+        <div class="eyebrow">Misión completada</div>
+        <div class="score-ring"><strong id="score">0/3</strong></div>
+        <h2 id="resultTitle">La pista está activa.</h2>
+        <p id="resultCopy"></p>
+        <div class="badge">Insignia · Explorador del aprendizaje</div>
+        <div>
+          <button class="primary" id="retryBtn">Reintentar misión</button>
+          <button class="ghost" id="shareBtn">Compartir resultado</button>
+        </div>
+      </section>
+
+      <p class="fineprint">Actividad basada en el guion “Gamificación Evaluativa”. La evaluación es una demostración educativa; adapta las preguntas a tu grupo.</p>
+    </main>
+    <script>
+      const questions = [
+        {
+          prompt: "¿Qué es la gamificación evaluativa?",
+          options: [
+            "Convertir toda evaluación en un videojuego sin objetivos de aprendizaje.",
+            "Usar mecánicas de juego para evaluar y aumentar el compromiso con el aprendizaje.",
+            "Eliminar la retroalimentación para que el reto sea más difícil."
+          ],
+          answer: 1,
+          explanation: "Correcto: integra puntos, retos o niveles sin perder el rigor de la evaluación."
+        },
+        {
+          prompt: "¿Cuál conjunto reúne mecánicas de juego mencionadas en el video?",
+          options: [
+            "Puntos, retos y niveles.",
+            "Silencio, castigo y repetición.",
+            "Asistencia, uniforme y recreo."
+          ],
+          answer: 0,
+          explanation: "Exacto: puntos, retos y niveles son recursos para hacer visible el progreso."
+        },
+        {
+          prompt: "En el Escape Room, ¿qué ocurre cuando QUIZ se equivoca?",
+          options: [
+            "Pierde definitivamente y queda fuera de la actividad.",
+            "La pregunta desaparece y el grupo continúa sin él.",
+            "Recibe retroalimentación al instante y puede reintentar."
+          ],
+          answer: 2,
+          explanation: "Muy bien: el error se convierte en una pista, no en un castigo."
+        }
+      ];
+
+      const $ = (id) => document.getElementById(id);
+      let current = 0;
+      let score = 0;
+      let timerId;
+      let answered = false;
+
+      function show(id) {
+        ["start", "quiz", "result"].forEach((section) => $(section).classList.toggle("hidden", section !== id));
+      }
+
+      function renderQuestion() {
+        answered = false;
+        const item = questions[current];
+        $("questionLabel").textContent = `Pregunta ${String(current + 1).padStart(2, "0")} / 03`;
+        $("question").textContent = item.prompt;
+        $("progress").style.width = `${((current + 1) / questions.length) * 100}%`;
+        $("feedback").textContent = "";
+        $("feedback").className = "feedback";
+        $("nextBtn").classList.add("hidden");
+        $("answers").innerHTML = item.options.map((option, index) =>
+          `<button class="answer" data-index="${index}"><b>${String.fromCharCode(65 + index)}</b>${option}</button>`
+        ).join("");
+        $("answers").querySelectorAll(".answer").forEach((button) => button.addEventListener("click", () => selectAnswer(Number(button.dataset.index))));
+        startTimer();
+      }
+
+      function startTimer() {
+        clearInterval(timerId);
+        let remaining = 15;
+        $("timer").textContent = remaining;
+        timerId = setInterval(() => {
+          remaining -= 1;
+          $("timer").textContent = remaining;
+          if (remaining <= 0) {
+            clearInterval(timerId);
+            selectAnswer(-1);
+          }
+        }, 1000);
+      }
+
+      function selectAnswer(index) {
+        if (answered) return;
+        answered = true;
+        clearInterval(timerId);
+        const item = questions[current];
+        const buttons = [...$("answers").querySelectorAll(".answer")];
+        buttons.forEach((button) => {
+          button.disabled = true;
+          const buttonIndex = Number(button.dataset.index);
+          if (buttonIndex === item.answer) button.classList.add("correct");
+          if (buttonIndex === index && index !== item.answer) button.classList.add("wrong");
+        });
+        if (index === item.answer) {
+          score += 1;
+          $("feedback").textContent = item.explanation;
+          $("feedback").className = "feedback good";
+        } else {
+          $("feedback").textContent = index === -1 ? `El tiempo terminó. ${item.explanation}` : `Casi. ${item.explanation}`;
+          $("feedback").className = "feedback bad";
+        }
+        $("nextBtn").textContent = current === questions.length - 1 ? "Ver resultado →" : "Siguiente pista →";
+        $("nextBtn").classList.remove("hidden");
+      }
+
+      function finish() {
+        clearInterval(timerId);
+        $("score").textContent = `${score}/3`;
+        $("resultTitle").textContent = score === 3 ? "¡Misión perfecta!" : score >= 2 ? "La misión está casi completa." : "Toda respuesta abre una pista.";
+        $("resultCopy").textContent = score === 3
+          ? "Ya puedes explicar cómo la gamificación convierte la evaluación en una experiencia de aprendizaje activa."
+          : "Revisa las retroalimentaciones y vuelve a intentarlo. En esta misión, equivocarse también es avanzar.";
+        show("result");
+      }
+
+      $("startBtn").addEventListener("click", () => { current = 0; score = 0; show("quiz"); renderQuestion(); });
+      $("nextBtn").addEventListener("click", () => { if (current < questions.length - 1) { current += 1; renderQuestion(); } else finish(); });
+      $("retryBtn").addEventListener("click", () => { current = 0; score = 0; show("quiz"); renderQuestion(); });
+      $("shareBtn").addEventListener("click", async () => {
+        const message = `Completé la misión de Gamificación Evaluativa con ${score}/3 respuestas.`;
+        try {
+          await navigator.clipboard.writeText(message);
+          $("shareBtn").textContent = "Resultado copiado";
+        } catch {
+          $("shareBtn").textContent = message;
+        }
+      });
+    </script>
+  </body>
+</html>
